@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BillerApiController;
+use App\Http\Controllers\PaymentWebhookApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentApiController;
@@ -18,6 +20,8 @@ use App\Http\Controllers\PaymentApiController;
 // The route that the button calls to initialize payment
 Route::post('/pay', [PaymentApiController::class, 'initialize'])
     ->name('pay');
+Route::post('/webhook/flutterwave', [PaymentWebhookApiController::class, 'webhook'])
+    ->name('webhook');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
