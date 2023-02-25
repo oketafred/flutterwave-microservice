@@ -8,12 +8,12 @@ use Illuminate\Http\Client\RequestException;
 class FlutterwaveService
 {
     private string $baseUrl;
-    private string $apiKey;
+    private string $secretKey;
 
     public function __construct()
     {
         $this->baseUrl = config('flutterwave.base_url');
-        $this->apiKey = config('flutterwave.secret_key');
+        $this->secretKey = config('flutterwave.secret_key');
     }
 
     public function generateReference(string $transactionPrefix = null): string
@@ -34,9 +34,21 @@ class FlutterwaveService
         return Http::acceptJson()
             ->withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer '. $this->apiKey,
+                'Authorization' => 'Bearer '. $this->secretKey,
             ])
             ->post("{$this->baseUrl}/charges?type=mobile_money_uganda", $data)
+            ->throw()
+            ->json();
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function verifyTransaction($id)
+    {
+        return Http::acceptJson()
+            ->withToken($this->secretKey)
+            ->get($this->baseUrl . "/transactions/" . $id . '/verify')
             ->throw()
             ->json();
     }
