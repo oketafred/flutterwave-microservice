@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// The route that the button calls to initialize payment
+Route::post('/pay', [PaymentApiController::class, 'initialize'])
+    ->name('pay');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
